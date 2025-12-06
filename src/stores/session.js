@@ -11,9 +11,11 @@ export const useSessionStore = defineStore('session', () => {
     loading.value = true
     error.value = null
     try {
-      sessions.value = await sessionApi.getAllSessions()
+      const response = await sessionApi.getAllSessions()
+      // Handle ApiResponse format: { success, message, data }
+      sessions.value = response.data || response || []
     } catch (err) {
-      error.value = err.message
+      error.value = err.response?.data?.message || err.message
       console.error('Error fetching sessions:', err)
     } finally {
       loading.value = false
@@ -25,7 +27,7 @@ export const useSessionStore = defineStore('session', () => {
       await sessionApi.deleteSession(sessionId)
       sessions.value = sessions.value.filter(s => s.id !== sessionId)
     } catch (err) {
-      error.value = err.message
+      error.value = err.response?.data?.message || err.message
       throw err
     }
   }
@@ -35,7 +37,7 @@ export const useSessionStore = defineStore('session', () => {
       await sessionApi.deleteAllSessions()
       sessions.value = []
     } catch (err) {
-      error.value = err.message
+      error.value = err.response?.data?.message || err.message
       throw err
     }
   }

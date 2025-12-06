@@ -9,12 +9,14 @@ export const sessionApi = {
 
   // Delete a specific session
   async deleteSession(sessionId) {
-    await apiClient.delete(`/sessions/${sessionId}`)
+    const response = await apiClient.delete(`/sessions/${sessionId}`)
+    return response.data
   },
 
   // Delete all sessions
   async deleteAllSessions() {
-    await apiClient.delete('/sessions')
+    const response = await apiClient.delete('/sessions')
+    return response.data
   }
 }
 
